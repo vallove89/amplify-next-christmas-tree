@@ -4,15 +4,17 @@ import Image from 'next/image';
 import { heroDetails } from '@/data/hero';
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '@/amplify/data/resource';
+import { Amplify } from "aws-amplify";
+import outputs from "@/amplify_outputs.json";
 
+Amplify.configure(outputs);
 const client = generateClient<Schema>();
 
+// This function formats a phone number into the XXX-XXX-XXXX display format.
 const formatPhoneNumber = (value: string): string => {
   const cleaned = value.replace(/\D/g, '').slice(0, 10);
   const match = cleaned.match(/^(\d{3})(\d{3})(\d{0,4})$/);
-
   if (!match) return cleaned;
-
   const [, area, prefix, line] = match;
   return line ? `${area}-${prefix}-${line}` : `${area}-${prefix}`;
 };
@@ -27,40 +29,52 @@ const Hero: React.FC = () => {
     e.preventDefault();
     setError('');
     setSubmitted(false);
-
+  
     const trimmedValue = contactValue.trim();
 
-    const isEmailValid =
-      contactType === 'email' &&
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue);
-
-    const isPhoneValid =
-      contactType === 'phone' &&
-      /^\d{3}-\d{3}-\d{4}$/.test(trimmedValue);
-
-    if (!(isEmailValid || isPhoneValid)) {
-      setError(`Please enter a valid ${contactType}.`);
-      return;
+    // Validate based on type
+    if (contactType === 'email') {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) {
+        setError('Please enter a valid email.');
+        return;
+      }
+    } else if (contactType === 'phone') {
+      // Remove non-digit characters; expect exactly 10 digits
+      const digits = trimmedValue.replace(/\D/g, '');
+      if (digits.length !== 10) {
+        setError('Please enter a valid phone number.');
+        return;
+      }
     }
-
+  
+    // Prepare values for submission
+    const emailValue = contactType === 'email' ? trimmedValue : undefined;
+    const phoneValue =
+      contactType === 'phone'
+        ? `+1${trimmedValue.replace(/\D/g, '')}` // Convert to E.164 format for US numbers
+        : undefined;
+  
     try {
       const response = await client.models.Contact.create({
-        email: isEmailValid ? trimmedValue : undefined,
-        phone: isPhoneValid ? trimmedValue : undefined,
+        email: emailValue,
+        phone: phoneValue,
       });
-
+  
       if (response?.data) {
         setSubmitted(true);
       } else {
+        console.log(response);
         throw new Error('No response data');
       }
     } catch (err) {
       console.error('Submission error:', err);
+      console.log(phoneValue)
       setError('Oops! Something went wrong. Please try again.');
     }
   };
-
+  
   const toggleContactType = () => {
+    // Toggle contact type, and reset input and error
     setContactType((prev) => (prev === 'email' ? 'phone' : 'email'));
     setContactValue('');
     setError('');

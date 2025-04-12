@@ -9,8 +9,8 @@ specifies that any user authenticated via an API key can "create", "read",
 const schema = a.schema({
   Contact: a
     .model({
-      email: a.email(),
-      phone: a.phone()
+      email: a.string(),
+      phone: a.string()
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });
