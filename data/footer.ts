@@ -22,7 +22,7 @@ export const footerDetails: {
             url: "#gallery"
         }
     ],
-    email: 'address@yoursite.com',
+    email: 'DFWChristmasTrees@outlook.com',
     telephone: '+1 (123) 456-7890',
     socials: {
         // github: 'https://github.com',
