@@ -20,7 +20,7 @@ export const benefits: IBenefit[] = [
                 icon: <BsTreeFill size={26} />
             }
         ],
-        imageSrc: "/images/how-it-works-pick-a-tree.webp"
+        imageSrc: "/images/how-it-works-choose-a-tree.svg"
     },
     {
         title: "Pick A Delivery Time & Date",
@@ -42,7 +42,7 @@ export const benefits: IBenefit[] = [
                 icon: <FiRefreshCcw size={26} />
             }
         ],
-        imageSrc: "/images/how-it-works-pick-a-time-n-date.webp"
+        imageSrc: "/images/how-it-works-pick-a-time-n-date.svg"
     },
     {
         title: "Decorate Your Christmas Tree",
@@ -64,6 +64,6 @@ export const benefits: IBenefit[] = [
                 icon: <FiHeart size={26} />
             }
         ],        
-        imageSrc: "/images/how-it-works-decorate.webp"
+        imageSrc: "/images/how-it-works-decorate.svg"
     },
 ]

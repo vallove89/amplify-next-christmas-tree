@@ -6,14 +6,14 @@ import Logos from "@/components/Logos";
 import Benefits from "@/components/Benefits/Benefits";
 import Container from "@/components/Container";
 import Section from "@/components/Section";
-import Stats from "@/components/Stats";
-import CTA from "@/components/CTA";
-import { Amplify } from "aws-amplify";
-import outputs from "@/amplify_outputs.json";
+import CTA from '@/components/CTA';
 
-Amplify.configure(outputs);
+
+
+
 
 const HomePage: React.FC = () => {
+
   return (
     <>
       <Hero />
@@ -54,8 +54,8 @@ const HomePage: React.FC = () => {
 
         <FAQ />
 
-        
         <CTA />
+
       </Container>
     </>
   );

@@ -2,13 +2,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { heroDetails } from '@/data/hero';
-import { generateClient } from 'aws-amplify/data';
-import type { Schema } from '@/amplify/data/resource';
-import { Amplify } from "aws-amplify";
-import outputs from "@/amplify_outputs.json";
+import { getClient } from "@/lib/amplifyClient";
 
-Amplify.configure(outputs);
-const client = generateClient<Schema>();
 
 // This function formats a phone number into the XXX-XXX-XXXX display format.
 const formatPhoneNumber = (value: string): string => {
@@ -24,6 +19,7 @@ const Hero: React.FC = () => {
   const [contactValue, setContactValue] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const client = getClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +125,7 @@ const Hero: React.FC = () => {
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-r-lg text-white font-semibold transition"
+                className="px-6 py-3 bg-primary hover:bg-primary-accent rounded-r-lg text-white font-semibold transition"
               >
                 Notify Me
               </button>
